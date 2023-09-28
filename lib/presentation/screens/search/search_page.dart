@@ -1,4 +1,5 @@
 import 'package:feeds/helper/Helper.dart';
+import 'package:feeds/helper/extension.dart';
 import 'package:feeds/presentation/widgets/feed_card.dart';
 import 'package:feeds/presentation/widgets/search_container.dart';
 import 'package:feeds/store/app_store.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:feeds/helper/extension.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -64,23 +64,17 @@ class _SearchPageState extends State<SearchPage> {
                                           data: store.searchedFeeds![index],
                                         ).animate().fadeIn(duration: 300.ms),
                             )
-                          : Container();
-                  // store.searchedFeeds == null
-                  //   ? loadingIcon()
-                  //   : store.searchedFeeds != null &&
-                  //           store.searchedFeeds!.isNotEmpty
-                  //       ? SingleChildScrollView(
-                  //           scrollDirection: Axis.vertical,
-                  //           child: Column(
-                  //             mainAxisSize: MainAxisSize.min,
-                  //             children: [
-                  //               ...store.searchedFeeds!
-                  //                   .map((e) => FeedCard(data: e))
-                  //                   .toList(),
-                  //             ],
-                  //           ),
-                  //         )
-                  //       : Container();
+                          : const Center(
+                              child: Text(
+                                'No Result Found',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                  fontFamily: 'Spartan',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            );
                 }),
               ).animate().fadeIn(duration: 350.ms).then().slideY(
                     duration: 300.ms,

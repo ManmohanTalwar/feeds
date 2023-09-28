@@ -69,7 +69,15 @@ class _HomePageState extends State<HomePage>
                         )
                       : store.feeds != null &&
                               store.feeds!.title.isNullOrEmpty()
-                          ? Container()
+                          ? const Text(
+                              'No Feeds Found',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.0,
+                                fontFamily: 'Spartan',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            )
                           : ListView.builder(
                               itemCount: store.feeds!.rows?.length,
                               shrinkWrap: true,
