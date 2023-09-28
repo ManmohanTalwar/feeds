@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:http/http.dart';
-import 'package:http/http.dart' as http;
 import 'package:feeds/helper/app_prefs.dart';
 import 'package:feeds/helper/config.dart';
 import 'package:feeds/injection.dart';
+import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 import 'base_service.dart';
 

@@ -1,7 +1,8 @@
+import 'package:feeds/presentation/screens/error/no_internet_screen.dart';
+import 'package:feeds/presentation/screens/home/home_page.dart';
 import 'package:feeds/presentation/screens/search/search_page.dart';
-import 'package:flutter/material.dart';
-import 'package:feeds/presentation/screens/home_page.dart';
 import 'package:feeds/routes/route_list.dart';
+import 'package:flutter/material.dart';
 
 class Routes {
   static Map<String, WidgetBuilder> getAll() => _routes;
@@ -12,6 +13,7 @@ class Routes {
   static final Map<String, WidgetBuilder> _routes = {
     RouteList.home: (context) => const HomePage(),
     RouteList.search: (context) => const SearchPage(),
+    RouteList.errorScreen: (context) => const NoInternetScreen(),
   };
 
   static Route _routeGenerate(RouteSettings settings) {

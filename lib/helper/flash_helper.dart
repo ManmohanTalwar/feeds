@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:flash/flash.dart';
-import 'package:flutter/services.dart';
 import 'package:feeds/helper/app_constants.dart';
 import 'package:feeds/injection.dart';
 import 'package:feeds/services/navigation_service.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class FlashHelper {
   static Completer<BuildContext> _buildCompleter = Completer<BuildContext>();

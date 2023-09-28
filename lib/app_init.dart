@@ -3,13 +3,13 @@ import 'dart:developer';
 
 import 'package:feeds/helper/app_prefs.dart';
 import 'package:feeds/injection.dart';
-import 'package:feeds/presentation/screens/static_splashscreen.dart';
+import 'package:feeds/presentation/screens/splash/static_splashscreen.dart';
 import 'package:feeds/routes/route_list.dart';
+import 'package:feeds/store/app_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:feeds/services/navigation_service.dart';
-import 'package:feeds/store/app_store.dart';
 import 'package:provider/provider.dart';
+
 import 'services/services.dart';
 
 class AppInit extends StatefulWidget {
@@ -40,13 +40,16 @@ class _AppInitState extends State<AppInit> {
 
   Future loadInitData() async {
     try {
-      /// Load App model config
+      /// Load Local Storage config
       prefs = locator<AppPrefs>();
+
+      /// Initialize api service
       Services().setAppServices();
       await Future.delayed(
         Duration.zero,
         () async {
-          context.read<AppStore>().getFeeds();
+          /// prefetch data
+          context.read<AppStore>().init();
         },
       );
     } catch (e, trace) {
@@ -58,7 +61,7 @@ class _AppInitState extends State<AppInit> {
   @override
   Widget build(BuildContext context) {
     return StaticSplashScreen(
-      duration: 2400,
+      duration: 2200,
       isLottie: true,
       onNextScreen: onNextScreen(),
     );

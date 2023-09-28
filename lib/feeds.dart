@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:feeds/helper/theme.dart';
 import 'package:feeds/main.dart';
 import 'package:feeds/routes/route.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 

@@ -30,6 +30,8 @@ dependencies:
   lottie:
   flutter_animate:
   cached_network_image:
+  internet_connection_checker: ^1.0.0+1
+  connectivity_plus:
 
 dev_dependencies:
   flutter_test:

@@ -1,11 +1,11 @@
+import 'package:feeds/feeds.dart';
+import 'package:feeds/helper/app_constants.dart';
+import 'package:feeds/helper/app_prefs.dart';
+import 'package:feeds/services/navigation_service.dart';
+import 'package:feeds/services/network_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:feeds/helper/app_constants.dart';
-import 'package:feeds/helper/app_prefs.dart';
-import 'package:feeds/feeds.dart';
-import 'package:feeds/services/navigation_service.dart';
-import 'package:feeds/services/network_util.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
@@ -16,8 +16,14 @@ void main() async {
   Provider.debugCheckInvalidValueType = null;
   await setupLocator();
 
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  // await SystemChrome.setPreferredOrientations(
+  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle.light.copyWith(

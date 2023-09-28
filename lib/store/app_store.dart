@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:feeds/helper/app_prefs.dart';
 import 'package:feeds/helper/flash_helper.dart';
 import 'package:feeds/main.dart';
 import 'package:feeds/models/feeds.dart';
 import 'package:feeds/services/services.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:mobx/mobx.dart';
 
 part 'app_store.g.dart';
@@ -32,7 +34,21 @@ abstract class _AppStore with Store {
 
   @action
   Future<void> init() async {
+    Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      checkConnection();
+    });
+    checkConnection();
     getFeeds();
+  }
+
+  Future<void> checkConnection() async {
+    bool result = await InternetConnectionChecker().hasConnection;
+    locator<AppPrefs>().isNetworkError.setValue(!result);
+    if (result) {
+      getFeeds();
+    }
   }
 
   @action

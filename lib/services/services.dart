@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:feeds/injection.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 import 'base_service.dart';

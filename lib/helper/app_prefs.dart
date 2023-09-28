@@ -1,8 +1,6 @@
 import 'dart:developer';
 
-import 'package:feeds/feeds.dart';
 import 'package:feeds/injection.dart';
-import 'package:feeds/models/feeds.dart';
 import 'package:feeds/models/feeds.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
