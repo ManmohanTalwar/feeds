@@ -1,15 +1,15 @@
 import 'package:feeds/main.dart';
 
-class Feeds {
+class FeedEntity {
   String? title;
   List<FeedData>? rows;
 
-  Feeds({
+  FeedEntity({
     this.title,
     this.rows,
   });
 
-  factory Feeds.fromJson(Map<String, dynamic> json) => Feeds(
+  factory FeedEntity.fromJson(Map<String, dynamic> json) => FeedEntity(
         title: json['title'] ?? '',
         rows: (json['rows'] as List? ?? [])
             .map((e) => FeedData.fromJson(e))
@@ -20,6 +20,8 @@ class Feeds {
         'title': title,
         'rows': rows?.map((e) => e.toJson()),
       };
+
+  factory FeedEntity.isEmpty() => FeedEntity();
 }
 
 class FeedData {

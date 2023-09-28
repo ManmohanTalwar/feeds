@@ -1,14 +1,13 @@
 import 'dart:async';
 
+import 'package:feeds/helper/app_constants.dart';
+import 'package:feeds/main.dart';
+import 'package:feeds/presentation/widgets/animated_app_bar.dart';
+import 'package:feeds/presentation/widgets/feed_card.dart';
+import 'package:feeds/store/app_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:feeds/helper/app_constants.dart';
-import 'package:feeds/main.dart';
-import 'package:feeds/presentation/widgets/joke_card.dart';
-import 'package:feeds/presentation/widgets/timer_widget.dart';
-import 'package:feeds/store/app_store.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,18 +18,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin<HomePage>, WidgetsBindingObserver {
+    with
+        AutomaticKeepAliveClientMixin<HomePage>,
+        WidgetsBindingObserver,
+        SingleTickerProviderStateMixin {
   late AppStore store;
+  late AnimationController appBarController;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    appBarController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 350),
+    );
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    appBarController.dispose();
     super.dispose();
   }
 
@@ -50,35 +57,31 @@ class _HomePageState extends State<HomePage>
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 20.0,
-                ),
-                Stack(
-                  children: [
-                    Center(
-                      child: Lottie.asset(
-                        'assets/lottie/laugh_1.json',
-                        width: context.getWidth() * 0.4,
-                      ),
-                    ),
-                    const TimerWidget(),
-                  ],
+                AnimatedAppBar(
+                  isNormal: false,
+                  controller: appBarController,
                 ),
                 const SizedBox(
                   height: 50.0,
                 ),
                 Expanded(
                   child: Observer(
-                      builder: (context) => store.jokes.isNotEmpty
-                          ? ListView.builder(
-                              itemCount: store.jokes.length,
-                              shrinkWrap: true,
-                              controller: store.scrollController,
-                              itemBuilder: (context, index) => JokeCard(
-                                joke: store.jokes[index],
+                    builder: (context) => store.feeds == null
+                        ? Container()
+                        : store.feeds != null &&
+                                store.feeds!.title.isNullOrEmpty()
+                            ? Container()
+                            : ListView.builder(
+                                itemCount: store.feeds!.rows?.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) =>
+                                    store.feeds!.rows![index].isEmpty()
+                                        ? const SizedBox.shrink()
+                                        : FeedCard(
+                                            data: store.feeds!.rows![index],
+                                          ),
                               ),
-                            )
-                          : const CircularProgressIndicator()),
+                  ),
                 ),
               ],
             ),

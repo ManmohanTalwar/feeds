@@ -1,6 +1,9 @@
 import 'dart:developer';
 
+import 'package:feeds/feeds.dart';
 import 'package:feeds/injection.dart';
+import 'package:feeds/models/feeds.dart';
+import 'package:feeds/models/feeds.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class AppPrefs {
@@ -20,16 +23,21 @@ class AppPrefs {
           PrefsConstants.token,
           defaultValue: '',
         ),
-        jokes = preferences.getCustomValue(
-          PrefsConstants.jokes,
-          defaultValue: {},
-          adapter: const JsonAdapter(),
+        feeds = preferences.getCustomValue(
+          PrefsConstants.feeds,
+          defaultValue: FeedEntity.isEmpty(),
+          adapter: JsonAdapter(
+            deserializer: (val) {
+              log('app prefs data -> $val');
+              return FeedEntity.fromJson(val as Map<String, dynamic>);
+            },
+          ),
         );
 
   final Preference<bool> isFirstOpen;
   final Preference<bool> isNetworkError;
   final Preference<String> token;
-  Preference<Map<String, dynamic>> jokes;
+  Preference<FeedEntity> feeds;
 
   Future<bool> setBool(String key, bool value) async {
     printBefore(value: value, key: key);
@@ -78,5 +86,5 @@ class PrefsConstants {
   static const String isNetworkError = 'isNetworkError';
   static const String isFirstOpen = 'isFirstOpen';
   static const String token = 'token';
-  static const String jokes = 'jokes';
+  static const String feeds = 'feeds';
 }

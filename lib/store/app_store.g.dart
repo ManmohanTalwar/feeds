@@ -25,26 +25,42 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
-  late final _$jokesAtom = Atom(name: '_AppStore.jokes', context: context);
+  late final _$feedsAtom = Atom(name: '_AppStore.feeds', context: context);
 
   @override
-  ObservableList<String> get jokes {
-    _$jokesAtom.reportRead();
-    return super.jokes;
+  FeedEntity? get feeds {
+    _$feedsAtom.reportRead();
+    return super.feeds;
   }
 
   @override
-  set jokes(ObservableList<String> value) {
-    _$jokesAtom.reportWrite(value, super.jokes, () {
-      super.jokes = value;
+  set feeds(FeedEntity? value) {
+    _$feedsAtom.reportWrite(value, super.feeds, () {
+      super.feeds = value;
     });
+  }
+
+  late final _$initAsyncAction =
+      AsyncAction('_AppStore.init', context: context);
+
+  @override
+  Future<void> init() {
+    return _$initAsyncAction.run(() => super.init());
+  }
+
+  late final _$getFeedsAsyncAction =
+      AsyncAction('_AppStore.getFeeds', context: context);
+
+  @override
+  Future<void> getFeeds() {
+    return _$getFeedsAsyncAction.run(() => super.getFeeds());
   }
 
   @override
   String toString() {
     return '''
 isLoading: ${isLoading},
-jokes: ${jokes}
+feeds: ${feeds}
     ''';
   }
 }
