@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:feeds/helper/app_constants.dart';
-import 'package:feeds/main.dart';
+import 'package:feeds/helper/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

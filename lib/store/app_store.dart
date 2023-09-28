@@ -26,12 +26,12 @@ abstract class _AppStore with Store {
 
   @action
   Future<void> getFeeds() async {
-    final jsonData = locator<AppPrefs>().feeds.getValue();
-    feeds ??= FeedEntity.fromJson(jsonData as Map<String, dynamic>);
+    feeds ??= locator<AppPrefs>().feeds.getValue();
     final response = await Services().getFeeds();
     if (response.statusCode < 400) {
       final jsonResp = json.decode(response.body);
       FeedEntity feed = FeedEntity.fromJson(jsonResp);
+      feeds = feeds;
     } else {
       FlashHelper.errorBar(message: 'Please try again...');
     }

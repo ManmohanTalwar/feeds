@@ -1,4 +1,4 @@
-import 'package:feeds/main.dart';
+import 'package:feeds/helper/extension.dart';
 import 'package:feeds/presentation/widgets/entry_field.dart';
 import 'package:flutter/material.dart';
 

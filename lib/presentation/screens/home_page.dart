@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:feeds/helper/app_constants.dart';
-import 'package:feeds/main.dart';
 import 'package:feeds/presentation/widgets/animated_app_bar.dart';
 import 'package:feeds/presentation/widgets/feed_card.dart';
 import 'package:feeds/store/app_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:feeds/helper/extension.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
@@ -50,41 +51,43 @@ class _HomePageState extends State<HomePage>
       child: SafeArea(
         child: Scaffold(
           backgroundColor: AppConstants.white,
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AnimatedAppBar(
-                  isNormal: false,
-                  controller: appBarController,
+          body: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedAppBar(
+                isNormal: false,
+                controller: appBarController,
+              ),
+              const SizedBox(
+                height: 50.0,
+              ),
+              Expanded(
+                child: Observer(
+                  builder: (context) => store.feeds == null
+                      ? Container()
+                      : store.feeds != null &&
+                              store.feeds!.title.isNullOrEmpty()
+                          ? Container()
+                          : ListView.builder(
+                              itemCount: store.feeds!.rows?.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) => store
+                                      .feeds!.rows![index]
+                                      .isEmpty()
+                                  ? const SizedBox.shrink()
+                                  : FeedCard(
+                                      data: store.feeds!.rows![index],
+                                    ).animate().fadeIn(duration: 300.ms).slideY(
+                                        duration: 450.ms,
+                                        end: 0,
+                                        begin: 0.5,
+                                      ),
+                            ),
                 ),
-                const SizedBox(
-                  height: 50.0,
-                ),
-                Expanded(
-                  child: Observer(
-                    builder: (context) => store.feeds == null
-                        ? Container()
-                        : store.feeds != null &&
-                                store.feeds!.title.isNullOrEmpty()
-                            ? Container()
-                            : ListView.builder(
-                                itemCount: store.feeds!.rows?.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) =>
-                                    store.feeds!.rows![index].isEmpty()
-                                        ? const SizedBox.shrink()
-                                        : FeedCard(
-                                            data: store.feeds!.rows![index],
-                                          ),
-                              ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

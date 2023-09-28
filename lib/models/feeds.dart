@@ -1,4 +1,4 @@
-import 'package:feeds/main.dart';
+import 'package:feeds/helper/extension.dart';
 
 class FeedEntity {
   String? title;

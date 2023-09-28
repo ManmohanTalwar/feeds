@@ -29,6 +29,7 @@ dependencies:
   injectable: ^2.3.0
   lottie:
   flutter_animate:
+  cached_network_image:
 
 dev_dependencies:
   flutter_test:
