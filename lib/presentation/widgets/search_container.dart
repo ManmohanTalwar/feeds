@@ -44,6 +44,11 @@ class SearchContainer extends StatelessWidget {
                           onSearched!(val);
                         }
                       },
+                      onChanged: (val) {
+                        if (onSearched != null) {
+                          onSearched!(val);
+                        }
+                      },
                       suffixWidget: Container(
                         padding: const EdgeInsets.all(8.0),
                         width: 30.0,

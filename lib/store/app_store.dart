@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:feeds/helper/app_prefs.dart';
-import 'package:feeds/helper/extension.dart';
 import 'package:feeds/helper/flash_helper.dart';
 import 'package:feeds/main.dart';
 import 'package:feeds/models/feeds.dart';
@@ -20,9 +20,35 @@ abstract class _AppStore with Store {
   @observable
   FeedEntity? feeds;
 
+  @observable
+  ObservableList<FeedData>? searchedFeeds;
+
+  @computed
+  List<FeedData>? get feedList => feeds == null
+      ? null
+      : feeds != null && feeds!.rows != null && feeds!.rows!.isNotEmpty
+          ? feeds!.rows!
+          : [];
+
   @action
   Future<void> init() async {
     getFeeds();
+  }
+
+  @action
+  Future<void> searchFeed({required String query}) async {
+    searchedFeeds = null;
+    searchedFeeds = ObservableList<FeedData>();
+    log('query -> $query ${feedList?.length}');
+    feedList?.forEach((data) {
+      log('title -> ${data.title} --query -> ${query} CONTAINS -> ${data.title != null && data.title!.toLowerCase().contains(query.toLowerCase())}');
+      if (data.title != null &&
+          data.title!.toLowerCase().contains(query.toLowerCase())) {
+        searchedFeeds!.add(data);
+      }
+    });
+    log('searched -> $query ${searchedFeeds?.length}');
+    log('searched -> $query ${searchedFeeds?.map((element) => element.title).toList()}');
   }
 
   @action

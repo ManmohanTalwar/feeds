@@ -1,7 +1,12 @@
-import 'package:feeds/presentation/screens/search/widgets/search_widget.dart';
+import 'package:feeds/helper/Helper.dart';
+import 'package:feeds/presentation/widgets/feed_card.dart';
 import 'package:feeds/presentation/widgets/search_container.dart';
+import 'package:feeds/store/app_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
+import 'package:feeds/helper/extension.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -11,42 +16,13 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  bool showList = true;
-  List<Map<String, dynamic>> searchData = [
-    {
-      'shipment_name': 'Macbook Pro M2',
-      'shipment_id': '#NE43765875',
-      'from': 'Paris',
-      'to': 'Morocco'
-    },
-    {
-      'shipment_name': 'Summer Jacket',
-      'shipment_id': '#NE44965875',
-      'from': 'Barcelona',
-      'to': 'Paris'
-    },
-    {
-      'shipment_name': 'Tapered Jeans',
-      'shipment_id': '#NE86865875',
-      'from': 'Colombia',
-      'to': 'Paris'
-    },
-    {
-      'shipment_name': 'Slim Fit Jeans AW',
-      'shipment_id': '#NE98765875',
-      'from': 'Bogota',
-      'to': 'Dhaka'
-    },
-    {
-      'shipment_name': 'Office Desk',
-      'shipment_id': '#NE99786875',
-      'from': 'France',
-      'to': 'Germany'
-    },
-  ];
+  late AppStore store;
+  bool isInitial = true;
   @override
   Widget build(BuildContext context) {
+    store = context.watch<AppStore>();
     return Scaffold(
+      backgroundColor: context.primaryColorLight(),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,53 +32,56 @@ class _SearchPageState extends State<SearchPage> {
               child: SearchContainer(
                 isSearch: true,
                 onSearched: (val) {
-                  setState(
-                    () {
-                      showList = false;
-                    },
-                  );
-                  Future.delayed(const Duration(milliseconds: 100), () {
+                  if (val.isEmpty) {
                     setState(() {
-                      showList = true;
+                      isInitial = true;
                     });
-                  });
+                  } else {
+                    setState(() {
+                      isInitial = false;
+                    });
+                    store.searchFeed(query: val);
+                  }
                 },
               ),
             ),
-            if (showList)
+            if (!isInitial)
               Flexible(
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 12.0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.blueGrey.withOpacity(0.1),
-                        spreadRadius: 5,
-                        blurRadius: 20.0,
-                        offset: const Offset(-4, 0),
-                      ),
-                    ],
-                  ),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ...searchData
-                            .map((e) => SearchWidget(
-                                  data: e,
-                                ))
-                            .toList(),
-                      ],
-                    ),
-                  ),
-                ),
+                child: Observer(builder: (context) {
+                  return store.searchedFeeds == null
+                      ? loadingIcon(
+                          isFull: true,
+                        )
+                      : store.searchedFeeds != null &&
+                              store.searchedFeeds!.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: store.searchedFeeds!.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) =>
+                                  store.searchedFeeds![index].isEmpty()
+                                      ? const SizedBox.shrink()
+                                      : FeedCard(
+                                          data: store.searchedFeeds![index],
+                                        ).animate().fadeIn(duration: 300.ms),
+                            )
+                          : Container();
+                  // store.searchedFeeds == null
+                  //   ? loadingIcon()
+                  //   : store.searchedFeeds != null &&
+                  //           store.searchedFeeds!.isNotEmpty
+                  //       ? SingleChildScrollView(
+                  //           scrollDirection: Axis.vertical,
+                  //           child: Column(
+                  //             mainAxisSize: MainAxisSize.min,
+                  //             children: [
+                  //               ...store.searchedFeeds!
+                  //                   .map((e) => FeedCard(data: e))
+                  //                   .toList(),
+                  //             ],
+                  //           ),
+                  //         )
+                  //       : Container();
+                }),
               ).animate().fadeIn(duration: 350.ms).then().slideY(
                     duration: 300.ms,
                     begin: 0.3,
