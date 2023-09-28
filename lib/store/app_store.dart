@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:feeds/helper/app_prefs.dart';
 import 'package:feeds/helper/flash_helper.dart';
 import 'package:feeds/main.dart';
-import 'package:feeds/models/joke.dart';
+import 'package:feeds/models/feeds.dart';
 import 'package:feeds/services/services.dart';
 import 'package:mobx/mobx.dart';
 
@@ -28,7 +28,7 @@ abstract class _AppStore with Store {
 
   @action
   Future<void> init() async {
-    getJoke();
+    getFeeds();
     countController.restart(duration: 60);
   }
 
@@ -45,34 +45,17 @@ abstract class _AppStore with Store {
   }
 
   @action
-  Future<void> getJoke() async {
+  Future<void> getFeeds() async {
     final jsonData = locator<AppPrefs>().jokes.getValue();
     if (jokes.isEmpty) {
       jokes.addAll(jsonData.values.toList().map((e) => e.toString()).toList());
       scroll();
     }
-    final response = await Services().getJoke();
+    final response = await Services().getFeeds();
     countController.restart(duration: 60);
     if (response.statusCode < 400) {
       final jsonResp = json.decode(response.body);
-      Joke joke = Joke.fromJson(jsonResp);
-      if (jokes.isNotEmpty && jokes.length < 10) {
-        jokes.add(joke.joke ?? '');
-        jsonData.addAll({'${jsonData.length + 1}': joke.joke});
-        locator<AppPrefs>().jokes.setValue(jsonData);
-        scroll();
-      } else {
-        if (jokes.isNotEmpty) {
-          jokes.removeLast();
-          jsonData.remove('${jsonData.length}');
-        }
-        jsonData.addAll({'${jsonData.length + 1}': joke.joke});
-        jokes.add(joke.joke ?? '');
-        locator<AppPrefs>().jokes.setValue(jsonData);
-        if (jokes.isNotEmpty) {
-          scroll();
-        }
-      }
+      Feeds joke = Feeds.fromJson(jsonResp);
     } else {
       FlashHelper.errorBar(message: 'Please try again...');
     }

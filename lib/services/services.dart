@@ -21,7 +21,7 @@ class Services implements BaseServices {
   }
 
   @override
-  Future<Response> getJoke() async {
-    return await serviceApi.getJoke();
+  Future<Response> getFeeds() async {
+    return await serviceApi.getFeeds();
   }
 }

@@ -30,11 +30,10 @@ class FeedsState extends State<Feeds> with WidgetsBindingObserver {
         child: Sizer(builder: (context, orientation, deviceType) {
           return MaterialApp(
             navigatorKey: locator<NavigationService>().navigatorKey,
-            title: 'Shipment Ready',
+            title: 'Feeds',
             debugShowCheckedModeBanner: false,
             navigatorObservers: [
               MyRouteObserver(),
-              // FirebaseAnalyticsObserver(analytics: analytics),
             ],
             home: const SafeArea(
               child: ScrollConfiguration(
@@ -59,15 +58,10 @@ class FeedsState extends State<Feeds> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     switch (state) {
       case AppLifecycleState.resumed:
-        // await locator<AnalyticsService>()
-        //     .getAnalyticsObserver()
-        //     .analytics
-        //     .logAppOpen();
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
-        // await locator<AnalyticsService>().logAppClosed(name: 'app_closed');
         break;
       case AppLifecycleState.hidden:
         // TODO: Handle this case.

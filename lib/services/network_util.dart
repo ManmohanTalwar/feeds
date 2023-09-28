@@ -102,9 +102,9 @@ class NetworkUtil implements BaseServices {
   }
 
   @override
-  Future<Response> getJoke() async {
+  Future<Response> getFeeds() async {
     final Response response = await _get(
-      AuthApiUrls.getJoke,
+      AuthApiUrls.getFeeds,
       headers,
     );
     return Future.value(response);

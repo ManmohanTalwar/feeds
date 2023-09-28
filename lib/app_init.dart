@@ -46,14 +46,7 @@ class _AppInitState extends State<AppInit> {
       await Future.delayed(
         Duration.zero,
         () async {
-          context.read<AppStore>().getJoke();
-          Timer.periodic(const Duration(seconds: 60), (timer) {
-            locator<NavigationService>()
-                .navigatorKey
-                .currentContext!
-                .read<AppStore>()
-                .getJoke();
-          });
+          context.read<AppStore>().getFeeds();
         },
       );
     } catch (e, trace) {

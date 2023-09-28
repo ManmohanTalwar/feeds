@@ -80,3 +80,7 @@ extension ContextExtentions on BuildContext {
         weight: fontWeight,
       );
 }
+
+extension StringExtensions on String? {
+  bool isNullOrEmpty() => this == null || this!.isEmpty;
+}
