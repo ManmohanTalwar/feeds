@@ -9,7 +9,7 @@ extension ContextExtentions on BuildContext {
   Color white() => AppConstants.white;
   Color black() => AppConstants.black;
   Color primaryColor() => AppConstants.primaryColor;
-  Color primaryColorLight() => const Color(0xff7457C4);
+  Color primaryColorLight() => const Color(0xffdadae7);
   Color subTitleColor() => const Color(0xff959595);
   Color dividerColor() => const Color(0xfff3f3f3);
   Color greyTextColor() => const Color(0xffD5D4D5);

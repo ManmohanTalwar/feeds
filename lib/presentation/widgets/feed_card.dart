@@ -13,51 +13,62 @@ class FeedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 450),
-        margin: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ImageWidget(
-              data.imageHref,
-            ).animate().fadeIn(
-                  duration: 350.ms,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: IntrinsicHeight(
+        child: Material(
+          color: Colors.white,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 450),
+            margin: const EdgeInsets.only(bottom: 10.0),
+            color: context.white(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ImageWidget(
+                  data.imageHref,
+                ).animate().fadeIn(
+                      duration: 450.ms,
+                    ),
+                Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10.0,
+                    horizontal: 12.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        data.title ?? '',
+                        style: context.customStyle(
+                          size: 16.0,
+                          color: context.black(),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if (!data.description.isNullOrEmpty()) ...{
+                        const SizedBox(
+                          height: 4.0,
+                        ),
+                        Text(
+                          data.description ?? '',
+                          style: context.customStyle(
+                            size: 14.0,
+                            color: context.black(),
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      },
+                    ],
+                  ),
                 ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10.0,
-                horizontal: 12.0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    data.title ?? '',
-                    style: context.customStyle(
-                      size: 16.0,
-                      color: context.black(),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 4.0,
-                  ),
-                  Text(
-                    data.description ?? '',
-                    style: context.customStyle(
-                      size: 14.0,
-                      color: context.black(),
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ],
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

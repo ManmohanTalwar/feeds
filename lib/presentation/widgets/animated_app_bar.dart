@@ -3,11 +3,14 @@ import 'package:feeds/main.dart';
 import 'package:feeds/presentation/widgets/search_container.dart';
 import 'package:feeds/routes/route_list.dart';
 import 'package:feeds/services/navigation_service.dart';
+import 'package:feeds/store/app_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
-class AnimatedAppBar extends StatelessWidget {
+class AnimatedAppBar extends StatefulWidget {
   final bool isNormal;
   final String? title;
   final Widget? bottom;
@@ -23,7 +26,15 @@ class AnimatedAppBar extends StatelessWidget {
   });
 
   @override
+  State<AnimatedAppBar> createState() => _AnimatedAppBarState();
+}
+
+class _AnimatedAppBarState extends State<AnimatedAppBar> {
+  late AppStore store;
+
+  @override
   Widget build(BuildContext context) {
+    store = context.watch<AppStore>();
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
       color: context.primaryColor(),
@@ -32,7 +43,7 @@ class AnimatedAppBar extends StatelessWidget {
         right: 12.0,
         top: 12.0,
       ),
-      child: isNormal
+      child: widget.isNormal
           ? Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -41,7 +52,7 @@ class AnimatedAppBar extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      onPressed: onBackPressed,
+                      onPressed: widget.onBackPressed,
                       icon: const Icon(
                         Icons.arrow_back_ios,
                         color: Colors.white,
@@ -50,7 +61,7 @@ class AnimatedAppBar extends StatelessWidget {
                     Flexible(
                       flex: 5,
                       child: Text(
-                        title ?? '',
+                        widget.title ?? '',
                         style: context.customStyle(
                           color: Colors.white,
                           size: 18.0,
@@ -61,7 +72,7 @@ class AnimatedAppBar extends StatelessWidget {
                     const Spacer(),
                   ],
                 ),
-                if (bottom != null) bottom!,
+                if (widget.bottom != null) widget.bottom!,
               ],
             )
           : Column(
@@ -86,57 +97,43 @@ class AnimatedAppBar extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/svg/icons/navigation.svg',
-                                  color: context.greyTextColor(),
-                                  height: 14.0,
-                                ),
-                                const SizedBox(
-                                  width: 4.0,
-                                ),
-                                Text(
-                                  'Your Location',
-                                  style: context.customStyle(
-                                    color: context.greyTextColor(),
-                                    size: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              'Explore',
+                              style: context.customStyle(
+                                color: context.greyTextColor(),
+                                size: 14.0,
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
                             const SizedBox(
                               height: 2.0,
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  'Wertheimer, Illinois',
-                                  style: context.customStyle(
-                                    color: Colors.white,
-                                    size: 14.0,
-                                    fontWeight: FontWeight.normal,
+                            Observer(builder: (context) {
+                              return Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/svg/navigation.svg',
+                                    color: context.greyTextColor(),
+                                    height: 14.0,
                                   ),
-                                ),
-                                const Icon(
-                                  Icons.keyboard_arrow_down_rounded,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
+                                  const SizedBox(
+                                    width: 4.0,
+                                  ),
+                                  Text(
+                                    store.feeds?.title ?? '',
+                                    style: context.customStyle(
+                                      color: Colors.white,
+                                      size: 14.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
                           ],
                         ),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.notifications_none),
-                    )
                   ],
                 ),
                 const SizedBox(
@@ -183,7 +180,7 @@ class AnimatedAppBar extends StatelessWidget {
               ],
             ),
     )
-        .animate(controller: controller)
+        .animate(controller: widget.controller)
         .fadeIn(duration: 300.ms)
         .then()
         .slide(duration: 450.ms);

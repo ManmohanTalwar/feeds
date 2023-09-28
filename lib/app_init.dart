@@ -58,7 +58,7 @@ class _AppInitState extends State<AppInit> {
   @override
   Widget build(BuildContext context) {
     return StaticSplashScreen(
-      duration: 3000,
+      duration: 2400,
       isLottie: true,
       onNextScreen: onNextScreen(),
     );

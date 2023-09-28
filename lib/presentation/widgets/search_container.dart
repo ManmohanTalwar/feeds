@@ -31,7 +31,7 @@ class SearchContainer extends StatelessWidget {
                   ),
                   Expanded(
                     child: EntryField(
-                      hint: 'Enter the receipt number ...',
+                      hint: 'Search ...',
                       prefixWidget: Icon(
                         Icons.search,
                         color: context.primaryColor(),
@@ -95,7 +95,7 @@ class SearchContainer extends StatelessWidget {
                           width: 6.0,
                         ),
                         Text(
-                          'Enter the receipt number ...',
+                          'Search ...',
                           style: context.customStyle(
                             color: Colors.grey,
                             size: 14.0,

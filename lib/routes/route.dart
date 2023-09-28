@@ -1,3 +1,4 @@
+import 'package:feeds/presentation/screens/search/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:feeds/presentation/screens/home_page.dart';
 import 'package:feeds/routes/route_list.dart';
@@ -10,6 +11,7 @@ class Routes {
 
   static final Map<String, WidgetBuilder> _routes = {
     RouteList.home: (context) => const HomePage(),
+    RouteList.search: (context) => const SearchPage(),
   };
 
   static Route _routeGenerate(RouteSettings settings) {

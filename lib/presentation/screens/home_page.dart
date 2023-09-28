@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:feeds/helper/Helper.dart';
 import 'package:feeds/helper/app_constants.dart';
 import 'package:feeds/presentation/widgets/animated_app_bar.dart';
 import 'package:feeds/presentation/widgets/feed_card.dart';
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage>
       onWillPop: () => onWillPop(context),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: AppConstants.white,
+          backgroundColor: context.primaryColorLight(),
           body: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,13 +61,12 @@ class _HomePageState extends State<HomePage>
                 isNormal: false,
                 controller: appBarController,
               ),
-              const SizedBox(
-                height: 50.0,
-              ),
               Expanded(
                 child: Observer(
                   builder: (context) => store.feeds == null
-                      ? Container()
+                      ? loadingIcon(
+                          isFull: true,
+                        )
                       : store.feeds != null &&
                               store.feeds!.title.isNullOrEmpty()
                           ? Container()

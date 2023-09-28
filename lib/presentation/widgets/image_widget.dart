@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:feeds/helper/app_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class ImageWidget extends StatelessWidget {
   final String? image;
@@ -43,19 +42,16 @@ class ImageWidget extends StatelessWidget {
     final img = CachedNetworkImage(
       imageUrl: image ?? '',
       width: width,
-      imageBuilder: (context, imageProvider) => Container(
-        foregroundDecoration: isDissabled
-            ? const BoxDecoration(
-                color: Colors.grey,
-                backgroundBlendMode: BlendMode.saturation,
-              )
-            : null,
-        decoration: BoxDecoration(
-          borderRadius: borderRadius,
-          color: whiteColor,
-          image: DecorationImage(
-            image: imageProvider,
-            fit: fit ?? BoxFit.contain,
+      imageBuilder: (context, imageProvider) => AspectRatio(
+        aspectRatio: ratio,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: borderRadius,
+            color: whiteColor,
+            image: DecorationImage(
+              image: imageProvider,
+              fit: fit ?? BoxFit.contain,
+            ),
           ),
         ),
       ),
@@ -63,37 +59,23 @@ class ImageWidget extends StatelessWidget {
         child: Image.asset(
           'assets/images/image_error.png',
           fit: fit ?? BoxFit.contain,
+          height: 80.0,
         ),
       ),
       fit: fit ?? BoxFit.contain,
-      // placeholder: (context, _) => Center(
-      //   child: PreferenceBuilder<bool>(
-      //       preference: getIt<AppPrefs>().appSwitched,
-      //       builder: (context, appSwitched) {
-      //         return SvgPicture.asset(
-      //           appSwitched ? placeHolderStore : placeHolder,
-      //           color: placeHolderColor,
-      //           fit: BoxFit.contain,
-      //         );
-      //       }),
-      // ),
+      placeholder: (context, _) => Center(
+          child: Container(
+        height: 200,
+      ).animate().shimmer(
+                duration: 450.ms,
+              )),
     );
-    return SizedBox(
-      width: width,
-      height: width,
-      child: AspectRatio(
-        aspectRatio: ratio,
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: borderRadius ?? BorderRadius.zero,
-                color: greyColor,
-              ),
-              child: img,
-            ),
-          ],
+    return InteractiveViewer(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: borderRadius ?? BorderRadius.zero,
         ),
+        child: img,
       ),
     );
   }
